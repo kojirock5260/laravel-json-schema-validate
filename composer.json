@@ -1,11 +1,11 @@
 {
-  "name": "kojirock/laravel-json-schema-validate",
+  "name": "kojirock5260/laravel-json-schema-validate",
   "description": "json schema for request and response",
-  "keywords": ["laravel", "jsonschema", "api"],
+  "keywords": ["laravel", "json schema", "api"],
   "license": "MIT",
   "authors": [
     {
-      "name": "Kojirock",
+      "name": "kojirock5260",
       "email": "kojirock5260@gmail.com"
     }
   ],
