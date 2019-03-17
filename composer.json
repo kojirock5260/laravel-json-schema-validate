@@ -1,0 +1,31 @@
+{
+  "name": "kojirock/laravel-json-schema-validate",
+  "description": "json schema for request and response",
+  "keywords": ["laravel", "jsonschema", "api"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kojirock",
+      "email": "kojirock5260@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7",
+    "justinrainbow/json-schema": "^5.2.8",
+    "illuminate/support":        "5.7.x|5.8.x",
+    "illuminate/http":           "5.7.x|5.8.x",
+    "illuminate/routing":        "5.7.x|5.8.x"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kojirock\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Kojirock\\JsonSchemaServiceProvider"
+      ]
+    }
+  }
+}
