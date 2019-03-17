@@ -1,6 +1,6 @@
 <?php
 
-namespace Kojircok;
+namespace Kojirock;
 
 use Illuminate\Support\ServiceProvider;
 
