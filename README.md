@@ -6,7 +6,7 @@ JsonSchema Validate For Laravel Request And Response
 ## Installation
 
 ```bash
-composer require kojirock/laravel-json-schema-validate
+composer require kojirock5260/laravel-json-schema-validate
 ```
 
 ```bash
