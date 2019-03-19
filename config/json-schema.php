@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'exception' => Kojirock\Exception\JsonSchemaException::class,
+    'exception' => \Kojirock\Exception\JsonSchemaException::class,
 ];

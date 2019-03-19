@@ -4,24 +4,29 @@ declare(strict_types=1);
 
 namespace Kojirock\Exception;
 
-class JsonSchemaException extends \Exception
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+class JsonSchemaException extends HttpException
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * JsonSchemaException constructor.
+     * @param null|string     $message
+     * @param null|\Exception $previous
+     * @param int             $code
+     * @param array           $headers
      */
-    public function render(\Illuminate\Http\Request $request): \Illuminate\Http\JsonResponse
+    public function __construct(string $message = null, \Exception $previous = null, int $code = 0, array $headers = [])
     {
-        return \Illuminate\Support\Facades\Response::json([
-            'errorMessage' => $this->getJsonErrorMessage(),
-        ], 400);
+        parent::__construct(400, $message, $previous, $headers, $code);
+        $errorMessage = $this->getJsonErrorMessage();
+        $this->setMessage($errorMessage);
     }
 
     /**
      * Get JsonErrorMessage.
-     * @return array
+     * @return string
      */
-    public function getJsonErrorMessage(): array
+    public function getJsonErrorMessage(): string
     {
         $results     = [];
         $messageList = unserialize($this->getMessage());
@@ -29,6 +34,15 @@ class JsonSchemaException extends \Exception
         foreach ($messageList as $v) {
             $results[] = $v['message'];
         }
-        return $results;
+        return implode(',', $results);
+    }
+
+    /**
+     * Set ErrorMessage.
+     * @param string $errorMessage
+     */
+    public function setMessage(string $errorMessage): void
+    {
+        $this->message = $errorMessage;
     }
 }
