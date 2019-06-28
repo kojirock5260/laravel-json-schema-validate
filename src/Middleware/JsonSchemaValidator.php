@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kojirock\Middleware;
+namespace Kojirock\JsonSchemaValidate\Middleware;
 
-use Kojirock\SchemaInterface;
+use Kojirock\JsonSchemaValidate\SchemaInterface;
 
-class JsonSchemaValidate
+class JsonSchemaValidator
 {
     const TYPE_REQUEST  = 'Request';
     const TYPE_RESPONSE = 'Response';

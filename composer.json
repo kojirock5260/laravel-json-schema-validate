@@ -22,13 +22,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Kojirock\\": "src/"
+      "Kojirock\\JsonSchemaValidate\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Kojirock\\JsonSchemaServiceProvider"
+        "Kojirock\\JsonSchemaValidate\\JsonSchemaServiceProvider"
       ]
     }
   },
