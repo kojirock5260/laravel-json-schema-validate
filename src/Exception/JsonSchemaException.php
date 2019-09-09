@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kojirock\JsonSchemaValidate\Exception;
+namespace Kojirock5260\JsonSchemaValidate\Exception;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

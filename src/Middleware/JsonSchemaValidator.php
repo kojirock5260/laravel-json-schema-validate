@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kojirock\JsonSchemaValidate\Middleware;
+namespace Kojirock5260\JsonSchemaValidate\Middleware;
 
-use Kojirock\JsonSchemaValidate\SchemaInterface;
+use Kojirock5260\JsonSchemaValidate\SchemaInterface;
 
 class JsonSchemaValidator
 {

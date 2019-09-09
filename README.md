@@ -10,7 +10,7 @@ composer require kojirock5260/laravel-json-schema-validate
 ```
 
 ```bash
-php artisan vendor:publish --provider=Kojirock\\JsonSchemaServiceProvider
+php artisan vendor:publish --provider=Kojirock5260\\JsonSchemaServiceProvider
 ```
 
 ## Setup
@@ -22,7 +22,7 @@ Please describe
 ```php
     protected $routeMiddleware = [
         ...
-        'json_schema' => \Kojirock\Middleware\JsonSchemaValidate::class,
+        'json_schema' => \Kojirock5260\Middleware\JsonSchemaValidate::class,
     ];
 ```
 
@@ -57,7 +57,7 @@ declare(strict_types=1);
 
 namespace App\Http\Schema\Request;
 
-use Kojirock\SchemaInterface;
+use Kojirock5260\SchemaInterface;
 
 class MemberListSchema implements SchemaInterface
 {
@@ -101,7 +101,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-class AppJsonSchemaValidate extends \Kojirock\Middleware\JsonSchemaValidate
+class AppJsonSchemaValidate extends \Kojirock5260\Middleware\JsonSchemaValidate
 {
     /**
      * Get JsonSchema ClassName.
