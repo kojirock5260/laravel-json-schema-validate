@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kojirock\JsonSchemaValidate;
+namespace Kojirock5260\JsonSchemaValidate;
 
 interface SchemaInterface
 {
