@@ -29,7 +29,7 @@ class JsonSchemaException extends HttpException
     public function getJsonErrorMessage(): string
     {
         $results     = [];
-        $messageList = unserialize($this->getMessage());
+        $messageList = unserialize($this->getMessage(), null);
 
         foreach ($messageList as $v) {
             $results[] = $v['message'];
