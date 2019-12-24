@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": "^7.2",
+    "php": "^7.3",
     "justinrainbow/json-schema": "^5.2.8",
     "illuminate/support":        "^5.7|^6.0",
     "illuminate/http":           "^5.7|^6.0",
