@@ -10,7 +10,7 @@ composer require kojirock5260/laravel-json-schema-validate
 ```
 
 ```bash
-php artisan vendor:publish --provider=Kojirock5260\\JsonSchemaServiceProvider
+php artisan vendor:publish --provider=Kojirock5260\\JsonSchemaValidate\\JsonSchemaServiceProvider
 ```
 
 ## Setup
