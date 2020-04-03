@@ -19,10 +19,10 @@ Please describe
 
 ### 1. app/Http/Kernel.php
 
-```php
+```
     protected $routeMiddleware = [
         ...
-        'json_schema' => \Kojirock5260\Middleware\JsonSchemaValidate::class,
+        'json_schema' => \Kojirock5260\JsonSchemaValidate\Middleware\JsonSchemaValidator::class,
     ];
 ```
 
@@ -57,14 +57,13 @@ declare(strict_types=1);
 
 namespace App\Http\Schema\Request;
 
-use Kojirock5260\SchemaInterface;
+use Kojirock5260\JsonSchemaValidate\SchemaInterface;
 
-class MemberListSchema implements SchemaInterface
+class MemberList implements SchemaInterface
 {
     public static function getSchema(): array
     {
         return [
-            '$schema'    => 'http://json-schema.org/draft-07/schema#',
             'required'   => ['page'],
             'type'       => 'object',
             'properties' => [
@@ -91,51 +90,42 @@ class MemberListSchema implements SchemaInterface
 
 ```
 
+### 4. Exceptions
+
+* App\Exceptions\Handler.php
+
+```php
+    /**
+     * Prepare exception for rendering.
+     *
+     * @param  \Throwable  $e
+     * @return \Throwable
+     */
+    protected function prepareException(Throwable $e)
+    {
+        if ($e instanceof JsonSchemaException) {
+            return ValidationException::withMessages($e->getSchemaErrors());
+        }
+
+        return parent::prepareException($e);
+    }
+```
+
 
 ## Schema Directory Customise
+
+* config/json-schema.php
 
 ```php
 <?php
 
-declare(strict_types=1);
-
-namespace App\Http\Middleware;
-
-class AppJsonSchemaValidate extends \Kojirock5260\Middleware\JsonSchemaValidate
-{
+return [
     /**
-     * Get JsonSchema ClassName.
-     * @param \Illuminate\Routing\Route $route
-     * @param string                    $type
-     * @return string
+     * Schema Directory Base Namespace
      */
-    public function getJsonSchemaClassName(\Illuminate\Routing\Route $route, string $type): string
-    {
-        $routeName   = $route->getName();
-        $routePrefix = $this->getRoutePrefix($route);
-        return "App\\Http\\Schema\\{$routePrefix}\\{$type}\\{$routeName}Schema";
-    }
-
-    /**
-     * Get Route Prefix.
-     * @param \Illuminate\Routing\Route $route
-     * @return string
-     */
-    public function getRoutePrefix(\Illuminate\Routing\Route $route): string
-    {
-        // prefix = api/admin
-        $prefixData = explode('/', $route->getPrefix());
-
-        if (!isset($prefixData[1])) {
-            return 'Front';
-        }
-        return ucfirst($prefixData[1]);
-    }
-}
-
+    'namespace' => 'Acme\\Member\\Schema',
+];
 ```
-
-
 
 
 ## License

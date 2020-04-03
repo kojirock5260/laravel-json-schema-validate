@@ -1,5 +1,8 @@
 <?php
 
 return [
-    'exception' => \Kojirock5260\JsonSchemaValidate\Exception\JsonSchemaException::class,
+    /**
+     * Schema Directory Base Namespace
+     */
+    'namespace' => 'App\\Http\\Schema',
 ];

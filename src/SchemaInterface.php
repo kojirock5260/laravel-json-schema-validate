@@ -7,7 +7,7 @@ namespace Kojirock5260\JsonSchemaValidate;
 interface SchemaInterface
 {
     /**
-     * Get Schema
+     * Get Schema.
      * @return array
      */
     public static function getSchema(): array;
