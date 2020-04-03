@@ -4,44 +4,31 @@ declare(strict_types=1);
 
 namespace Kojirock5260\JsonSchemaValidate\Exception;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use JsonSchema\Validator;
 
-class JsonSchemaException extends HttpException
+class JsonSchemaException extends \RuntimeException
 {
     /**
-     * JsonSchemaException constructor.
-     * @param string|null $message
-     * @param \Throwable|null $previous
-     * @param array $headers
-     * @param int $code
+     * @var Validator
      */
-    public function __construct(?string $message = null, ?\Throwable $previous = null, array $headers = [], int $code = 0)
+    private $validator;
+
+    /**
+     * @param Validator $validator
+     * @return JsonSchemaException
+     */
+    public static function newException(Validator $validator): self
     {
-        parent::__construct(400, $message, $previous, $headers, $code);
-        $this->setMessage($this->getJsonErrorMessage());
+        $self            = new self('Json Schema Validate Error!');
+        $self->validator = $validator;
+        return $self;
     }
 
     /**
-     * Get JsonErrorMessage.
-     * @return string
+     * @return array
      */
-    public function getJsonErrorMessage(): string
+    public function getSchemaErrors(): array
     {
-        $results = [];
-        $messageList = unserialize($this->getMessage(), ['allowed_classes' => true]);
-        foreach ($messageList as $v) {
-            $results[] = $v['message'];
-        }
-
-        return implode(',', $results);
-    }
-
-    /**
-     * Set ErrorMessage.
-     * @param string $errorMessage
-     */
-    public function setMessage(string $errorMessage): void
-    {
-        $this->message = $errorMessage;
+        return $this->validator->getErrors();
     }
 }

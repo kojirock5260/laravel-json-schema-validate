@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Config;
 use JsonSchema\Validator;
+use Kojirock5260\JsonSchemaValidate\Exception\JsonSchemaException;
 use Kojirock5260\JsonSchemaValidate\SchemaInterface;
 
 class JsonSchemaValidator
@@ -64,8 +65,8 @@ class JsonSchemaValidator
      */
     protected function getJsonSchemaClassName(Route $route, string $type): string
     {
-        $routeName = $route->getName();
-        return "App\\Http\\Schema\\{$type}\\{$routeName}";
+        $namespace = Config::get('json-schema.namespace');
+        return "{$namespace}\\{$type}\\{$route->getName()}";
     }
 
     /**
@@ -97,7 +98,7 @@ class JsonSchemaValidator
      * Request Validate.
      * @param Request $request
      * @param Route $route
-     * @throws Exception
+     * @throws JsonSchemaException
      */
     private function validateRequest(Request $request, Route $route): void
     {
@@ -105,8 +106,7 @@ class JsonSchemaValidator
         if (null !== $requestSchema) {
             $this->validator->check((object) $request->all(), $requestSchema);
             if ($this->validator->numErrors() >= 1) {
-                $exceptionClass = Config::get('json-schema.exception');
-                throw new $exceptionClass(serialize($this->validator->getErrors()));
+                throw JsonSchemaException::newException($this->validator);
             }
         }
     }
@@ -115,7 +115,7 @@ class JsonSchemaValidator
      * Response Validate.
      * @param JsonResponse $response
      * @param Route $route
-     * @throws Exception
+     * @throws JsonSchemaException
      */
     private function validateResponse(JsonResponse $response, Route $route): void
     {
@@ -123,8 +123,7 @@ class JsonSchemaValidator
         if (null !== $responseSchema && $response->isSuccessful()) {
             $this->validator->check($response->getData(), $responseSchema);
             if ($this->validator->numErrors() >= 1) {
-                $exceptionClass = Config::get('json-schema.exception');
-                throw new $exceptionClass(serialize($this->validator->getErrors()));
+                throw JsonSchemaException::newException($this->validator);
             }
         }
     }
