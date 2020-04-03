@@ -49,7 +49,7 @@ class JsonSchemaValidator
      * @param string $type
      * @return string
      */
-    public function getJsonSchemaClassName(Route $route, string $type): string
+    protected function getJsonSchemaClassName(Route $route, string $type): string
     {
         $routeName = $route->getName();
         return "App\\Http\\Schema\\{$type}\\{$routeName}Schema";
@@ -61,7 +61,7 @@ class JsonSchemaValidator
      * @param string $type
      * @return array|null
      */
-    protected function getSchema(Route $route, string $type): ?array
+    private function getSchema(Route $route, string $type): ?array
     {
         $className = $this->getJsonSchemaClassName($route, $type);
         if (class_exists($className) && isset(class_implements($className)[SchemaInterface::class])) {
@@ -75,7 +75,7 @@ class JsonSchemaValidator
      * Get Route.
      * @return Route
      */
-    protected function getRoute(): Route
+    private function getRoute(): Route
     {
         return \Illuminate\Support\Facades\Route::current();
     }
@@ -87,7 +87,7 @@ class JsonSchemaValidator
      * @param Route $route
      * @throws Exception
      */
-    protected function validateRequest(Validator $v, Request $request, Route $route): void
+    private function validateRequest(Validator $v, Request $request, Route $route): void
     {
         $requestSchema = $this->getSchema($route, self::TYPE_REQUEST);
         if (null !== $requestSchema) {
@@ -106,7 +106,7 @@ class JsonSchemaValidator
      * @param Route $route
      * @throws Exception
      */
-    protected function validateResponse(Validator $v, JsonResponse $response, Route $route): void
+    private function validateResponse(Validator $v, JsonResponse $response, Route $route): void
     {
         $responseSchema = $this->getSchema($route, self::TYPE_RESPONSE);
         if (null !== $responseSchema && $response->isSuccessful()) {

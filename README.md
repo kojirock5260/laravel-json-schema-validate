@@ -19,10 +19,10 @@ Please describe
 
 ### 1. app/Http/Kernel.php
 
-```php
+```
     protected $routeMiddleware = [
         ...
-        'json_schema' => \Kojirock5260\Middleware\JsonSchemaValidate::class,
+        'json_schema' => \Kojirock5260\JsonSchemaValidate\Middleware\JsonSchemaValidator::class,
     ];
 ```
 
@@ -57,7 +57,7 @@ declare(strict_types=1);
 
 namespace App\Http\Schema\Request;
 
-use Kojirock5260\SchemaInterface;
+use Kojirock5260\JsonSchemaValidate\SchemaInterface;
 
 class MemberListSchema implements SchemaInterface
 {
@@ -101,7 +101,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-class AppJsonSchemaValidate extends \Kojirock5260\Middleware\JsonSchemaValidate
+class AppJsonSchemaValidate extends \Kojirock5260\JsonSchemaValidate\Middleware\JsonSchemaValidator
 {
     /**
      * Get JsonSchema ClassName.
