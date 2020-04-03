@@ -63,9 +63,12 @@ class JsonSchemaValidator
      * @param string $type
      * @return string
      */
-    protected function getJsonSchemaClassName(Route $route, string $type): string
+    private function getJsonSchemaClassName(Route $route, string $type): string
     {
         $namespace = Config::get('json-schema.namespace');
+        if (substr($namespace, -1) === '\\') {
+            $namespace = substr($namespace, 0, -1);
+        }
         return "{$namespace}\\{$type}\\{$route->getName()}";
     }
 
@@ -81,7 +84,6 @@ class JsonSchemaValidator
         if (class_exists($className) && isset(class_implements($className)[SchemaInterface::class])) {
             return $className::getSchema();
         }
-
         return null;
     }
 
