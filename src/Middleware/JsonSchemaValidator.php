@@ -19,6 +19,20 @@ class JsonSchemaValidator
     private const TYPE_RESPONSE = 'Response';
 
     /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
+     * JsonSchemaValidator constructor.
+     * @param Validator $validator
+     */
+    public function __construct(Validator $validator)
+    {
+        $this->validator = $validator;
+    }
+
+    /**
      * Handle an incoming request.
      * @param Request $request
      * @param Closure $next
@@ -32,12 +46,11 @@ class JsonSchemaValidator
             return $next($request);
         }
 
-        $validator = new Validator();
-        $this->validateRequest($validator, $request, $route);
+        $this->validateRequest($request, $route);
         $response = $next($request);
 
         if ($response instanceof JsonResponse) {
-            $this->validateResponse($validator, $response, $route);
+            $this->validateResponse($response, $route);
         }
 
         return $response;
@@ -82,38 +95,36 @@ class JsonSchemaValidator
 
     /**
      * Request Validate.
-     * @param Validator $v
      * @param Request $request
      * @param Route $route
      * @throws Exception
      */
-    private function validateRequest(Validator $v, Request $request, Route $route): void
+    private function validateRequest(Request $request, Route $route): void
     {
         $requestSchema = $this->getSchema($route, self::TYPE_REQUEST);
         if (null !== $requestSchema) {
-            $v->check((object) $request->all(), $requestSchema);
-            if ($v->numErrors() >= 1) {
+            $this->validator->check((object) $request->all(), $requestSchema);
+            if ($this->validator->numErrors() >= 1) {
                 $exceptionClass = Config::get('json-schema.exception');
-                throw new $exceptionClass(serialize($v->getErrors()));
+                throw new $exceptionClass(serialize($this->validator->getErrors()));
             }
         }
     }
 
     /**
      * Response Validate.
-     * @param Validator $v
      * @param JsonResponse $response
      * @param Route $route
      * @throws Exception
      */
-    private function validateResponse(Validator $v, JsonResponse $response, Route $route): void
+    private function validateResponse(JsonResponse $response, Route $route): void
     {
         $responseSchema = $this->getSchema($route, self::TYPE_RESPONSE);
         if (null !== $responseSchema && $response->isSuccessful()) {
-            $v->check($response->getData(), $responseSchema);
-            if ($v->numErrors() >= 1) {
+            $this->validator->check($response->getData(), $responseSchema);
+            if ($this->validator->numErrors() >= 1) {
                 $exceptionClass = Config::get('json-schema.exception');
-                throw new $exceptionClass(serialize($v->getErrors()));
+                throw new $exceptionClass(serialize($this->validator->getErrors()));
             }
         }
     }
