@@ -10,16 +10,15 @@ class JsonSchemaException extends HttpException
 {
     /**
      * JsonSchemaException constructor.
-     * @param null|string     $message
-     * @param null|\Exception $previous
-     * @param int             $code
-     * @param array           $headers
+     * @param string|null $message
+     * @param \Throwable|null $previous
+     * @param array $headers
+     * @param int $code
      */
-    public function __construct(string $message = null, \Exception $previous = null, int $code = 0, array $headers = [])
+    public function __construct(?string $message = null, ?\Throwable $previous = null, array $headers = [], int $code = 0)
     {
         parent::__construct(400, $message, $previous, $headers, $code);
-        $errorMessage = $this->getJsonErrorMessage();
-        $this->setMessage($errorMessage);
+        $this->setMessage($this->getJsonErrorMessage());
     }
 
     /**
@@ -28,12 +27,12 @@ class JsonSchemaException extends HttpException
      */
     public function getJsonErrorMessage(): string
     {
-        $results     = [];
-        $messageList = unserialize($this->getMessage());
-
+        $results = [];
+        $messageList = unserialize($this->getMessage(), ['allowed_classes' => true]);
         foreach ($messageList as $v) {
             $results[] = $v['message'];
         }
+
         return implode(',', $results);
     }
 

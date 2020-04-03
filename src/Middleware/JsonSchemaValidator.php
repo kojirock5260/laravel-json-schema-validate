@@ -8,29 +8,25 @@ use Kojirock5260\JsonSchemaValidate\SchemaInterface;
 
 class JsonSchemaValidator
 {
-    const TYPE_REQUEST  = 'Request';
-    const TYPE_RESPONSE = 'Response';
+    private const TYPE_REQUEST = 'Request';
+    private const TYPE_RESPONSE = 'Response';
 
     /**
      * Handle an incoming request.
-     *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     * @throws \Exception
+     * @param \Closure $next
      * @return mixed
+     * @throws \Exception
      */
-    public function handle($request, \Closure $next)
+    public function handle(\Illuminate\Http\Request $request, \Closure $next)
     {
         $route = $this->getRoute();
-
-        if (strlen((string) $route->getName()) === 0) {
+        if ('' === (string) $route->getName()) {
             return $next($request);
         }
 
         $validator = new \JsonSchema\Validator();
-
         $this->validateRequest($validator, $request, $route);
-
         $response = $next($request);
 
         if ($response instanceof \Illuminate\Http\JsonResponse) {
@@ -43,7 +39,7 @@ class JsonSchemaValidator
     /**
      * Get JsonSchema ClassName.
      * @param \Illuminate\Routing\Route $route
-     * @param string                    $type
+     * @param string $type
      * @return string
      */
     public function getJsonSchemaClassName(\Illuminate\Routing\Route $route, string $type): string
@@ -53,15 +49,14 @@ class JsonSchemaValidator
     }
 
     /**
-     * Get Schema
+     * Get Schema.
      * @param \Illuminate\Routing\Route $route
-     * @param string                    $type
-     * @return null|array
+     * @param string $type
+     * @return array|null
      */
     protected function getSchema(\Illuminate\Routing\Route $route, string $type): ?array
     {
         $className = $this->getJsonSchemaClassName($route, $type);
-
         if (class_exists($className) && isset(class_implements($className)[SchemaInterface::class])) {
             return $className::getSchema();
         }
@@ -75,23 +70,21 @@ class JsonSchemaValidator
      */
     protected function getRoute(): \Illuminate\Routing\Route
     {
-        return \Illuminate\Support\Facades\Route::getCurrentRoute();
+        return \Illuminate\Support\Facades\Route::current();
     }
 
     /**
      * Request Validate.
-     * @param \JsonSchema\Validator     $v
-     * @param \Illuminate\Http\Request  $request
+     * @param \JsonSchema\Validator $v
+     * @param \Illuminate\Http\Request $request
      * @param \Illuminate\Routing\Route $route
      * @throws \Exception
      */
     protected function validateRequest(\JsonSchema\Validator $v, \Illuminate\Http\Request $request, \Illuminate\Routing\Route $route): void
     {
         $requestSchema = $this->getSchema($route, self::TYPE_REQUEST);
-
-        if ($requestSchema !== null) {
+        if (null !== $requestSchema) {
             $v->check((object) $request->all(), $requestSchema);
-
             if ($v->numErrors() >= 1) {
                 $exceptionClass = \Illuminate\Support\Facades\Config::get('json-schema.exception');
                 throw new $exceptionClass(serialize($v->getErrors()));
@@ -101,23 +94,19 @@ class JsonSchemaValidator
 
     /**
      * Response Validate.
-     * @param \JsonSchema\Validator         $v
+     * @param \JsonSchema\Validator $v
      * @param \Illuminate\Http\JsonResponse $response
-     * @param \Illuminate\Routing\Route     $route
+     * @param \Illuminate\Routing\Route $route
      * @throws \Exception
      */
     protected function validateResponse(\JsonSchema\Validator $v, \Illuminate\Http\JsonResponse $response, \Illuminate\Routing\Route $route): void
     {
         $responseSchema = $this->getSchema($route, self::TYPE_RESPONSE);
-
-        if ($responseSchema !== null) {
-            if ($response->isSuccessful()) {
-                $v->check($response->getData(), $responseSchema);
-
-                if ($v->numErrors() >= 1) {
-                    $exceptionClass = \Illuminate\Support\Facades\Config::get('json-schema.exception');
-                    throw new $exceptionClass(serialize($v->getErrors()));
-                }
+        if (null !== $responseSchema && $response->isSuccessful()) {
+            $v->check($response->getData(), $responseSchema);
+            if ($v->numErrors() >= 1) {
+                $exceptionClass = \Illuminate\Support\Facades\Config::get('json-schema.exception');
+                throw new $exceptionClass(serialize($v->getErrors()));
             }
         }
     }
