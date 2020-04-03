@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kojirock5260\JsonSchemaValidate\Middleware;
 
 use Closure;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -38,7 +37,7 @@ class JsonSchemaValidator
      * @param Request $request
      * @param Closure $next
      * @return mixed
-     * @throws Exception
+     * @throws JsonSchemaException
      */
     public function handle(Request $request, Closure $next)
     {
