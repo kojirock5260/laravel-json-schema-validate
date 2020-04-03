@@ -64,7 +64,6 @@ class MemberList implements SchemaInterface
     public static function getSchema(): array
     {
         return [
-            '$schema'    => 'http://json-schema.org/draft-07/schema#',
             'required'   => ['page'],
             'type'       => 'object',
             'properties' => [
