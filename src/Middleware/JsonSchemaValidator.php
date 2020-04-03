@@ -65,7 +65,7 @@ class JsonSchemaValidator
     protected function getJsonSchemaClassName(Route $route, string $type): string
     {
         $routeName = $route->getName();
-        return "App\\Http\\Schema\\{$type}\\{$routeName}Schema";
+        return "App\\Http\\Schema\\{$type}\\{$routeName}";
     }
 
     /**
