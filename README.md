@@ -91,6 +91,27 @@ class MemberList implements SchemaInterface
 
 ```
 
+### 4. Exceptions
+
+* App\Exceptions\Handler.php
+
+```php
+    /**
+     * Prepare exception for rendering.
+     *
+     * @param  \Throwable  $e
+     * @return \Throwable
+     */
+    protected function prepareException(Throwable $e)
+    {
+        if ($e instanceof JsonSchemaException) {
+            return ValidationException::withMessages($e->getSchemaErrors());
+        }
+
+        return parent::prepareException($e);
+    }
+```
+
 
 ## Schema Directory Customise
 

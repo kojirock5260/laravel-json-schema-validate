@@ -29,6 +29,12 @@ class JsonSchemaException extends \RuntimeException
      */
     public function getSchemaErrors(): array
     {
-        return $this->validator->getErrors();
+        $results = [];
+        $errors  = $this->validator->getErrors();
+        foreach ($errors as $k => $error) {
+            $results[$error['property']][] = $error['message'];
+        }
+
+        return $results;
     }
 }
