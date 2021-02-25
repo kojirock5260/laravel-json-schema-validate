@@ -12,12 +12,12 @@
   "require": {
     "php": "^7.1",
     "justinrainbow/json-schema": "^5.2.8",
-    "illuminate/support":        "^5.8|^6.0|^7.0",
-    "illuminate/http":           "^5.8|^6.0|^7.0",
-    "illuminate/routing":        "^5.8|^6.0|^7.0"
+    "illuminate/support":        "^5.8|^6.0|^7.0|^8.0",
+    "illuminate/http":           "^5.8|^6.0|^7.0|^8.0",
+    "illuminate/routing":        "^5.8|^6.0|^7.0|^8.0"
   },
   "require-dev": {
-    "laravel/framework": "^5.8|^6.0|^7.0",
+    "laravel/framework": "^5.8|^6.0|^7.0|^8.0",
     "phpstan/phpstan": "^0.12.18",
     "friendsofphp/php-cs-fixer": "^2.16"
   },
