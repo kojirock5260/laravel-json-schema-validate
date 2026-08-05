@@ -1,6 +1,9 @@
 .idea
+.vscode
 /vendor
 composer.phar
 composer.lock
 .DS_Store
-.php_cs.cache
+.phpunit.cache
+.phpunit.result.cache
+.pint.cache
