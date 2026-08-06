@@ -12,8 +12,8 @@ English | [日本語](README.ja.md)
 
 | | |
 |---|---|
-| PHP | 8.5+ |
-| Laravel | 13.0+ |
+| PHP | 8.3+ |
+| Laravel | 12.0+ |
 | OpenAPI | 3.1 |
 
 ## Installation
