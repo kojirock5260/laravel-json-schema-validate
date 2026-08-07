@@ -1,0 +1,127 @@
+openapi: 3.1.0
+info:
+  title: Member API
+  version: 1.0.0
+paths:
+  /members:
+    get:
+      operationId: listMembers
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            exclusiveMinimum: 0
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [active, inactive]
+        - name: X-Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 4
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              required: true
+              schema:
+                type: integer
+                minimum: 0
+            X-Cache:
+              required: false
+              schema:
+                type: string
+                enum: [hit, miss]
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Member'
+        # 範囲指定。完全一致より後、default より先に選ばれる
+        '4XX':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message]
+                properties:
+                  message:
+                    type: string
+        default:
+          description: Unexpected
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [error]
+                properties:
+                  error:
+                    type: string
+    post:
+      operationId: createMember
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+      responses:
+        '201':
+          description: Created
+  /members/{memberId}:
+    # PathItem 階層のパラメータ。Operation 側と統合されることを確認する
+    parameters:
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      operationId: showMember
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    Member:
+      type: object
+      required: [name, status]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        # 3.1 では nullable ではなく型の union で表す
+        nickname:
+          type: [string, 'null']
+        # const は 2020-12 のキーワード
+        status:
+          const: active
+    # パーサが属性として持たない 2020-12 のキーワードを並べたスキーマ
+    Modern:
+      type: object
+      properties:
+        tuple:
+          type: array
+          prefixItems:
+            - type: string
+            - type: integer
+        limit:
+          type: integer
+          exclusiveMinimum: 10
+      dependentRequired:
+        card: [expiry]
+      unevaluatedProperties: false

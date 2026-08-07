@@ -1,0 +1,12 @@
+{
+  "preset": "laravel",
+  "rules": {
+    "declare_strict_types": true,
+    "no_superfluous_phpdoc_tags": false,
+    "phpdoc_to_comment": false,
+    "phpdoc_separation": false,
+    "ordered_imports": {
+      "sort_algorithm": "alpha"
+    }
+  }
+}
